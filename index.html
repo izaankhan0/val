@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #emojiContainer {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(30);
+            visibility: hidden;
+            transition: 1s ease-in;
+        }
+
+        #emojiContainer.visible {
+            visibility: visible;
+        }
+
+        .btn-2.shrink {
+            transform: scale(0.8); /* Adjust the scaling factor as needed */
+            transition: transform 0.5s ease-in; /* Adjust the duration and easing as needed */
+        }
+    </style>
+</head>
+<body style="margin: 0;">
+    <div class="container">
+
+        <h1>Will u be my Pookie</h1>
+        <div class="ball"></div>
+        <div class="buttons">
+            <button class="btn btn-1" onclick="showEmoji()">Yes 😍</button>
+            <button class="btn btn-2" id="noButton" onmouseover="startMoving()" onclick="shrinkButton()">No 😢</button>
+        </div>
+        
+        <!-- Hidden div with emoji -->
+        <div id="emojiContainer">
+            <div id="emoji">😍 <br>
+                <h2 style="font-size: 2px !important ; text-align: center;">Dm me 😉</h2></div>
+            </div>
+            
+            </div>
+            <script>
+        var moving = false;
+        var moveIndex = 0;
+
+        function startMoving() {
+            if (!moving) {
+                moving = true;
+                moveNoButton();
+            }
+        }
+
+        function moveNoButton() {
+            var noButton = document.getElementById('noButton');
+            var maxX = window.innerWidth - noButton.offsetWidth;
+            var maxY = window.innerHeight - noButton.offsetHeight;
+
+            // Set a shorter distance for the button to move
+            var moveDistance = 50 / 3; // Adjusted to one-third of the previous value
+
+            // Define move directions (right, top, left, bottom)
+            var moves = [
+                { x: moveDistance, y: 0 },
+                { x: 0, y: -moveDistance },
+                { x: -moveDistance, y: 0 },
+                { x: 0, y: moveDistance }
+            ];
+            
+            // Calculate new position based on the move index
+            var move = moves[moveIndex];
+            var randomX = Math.min(maxX - moveDistance, Math.max(moveDistance, Math.floor(Math.random() * (maxX - 1)))) - move.x;
+            var randomY = Math.min(maxY - moveDistance, Math.max(moveDistance, Math.floor(Math.random() * (maxY - 1)))) - move.y;
+            
+            // Apply animation
+            noButton.style.transition = 'transform 1s'; // Adjusted duration to 1s
+            noButton.style.transform = 'translate(' + randomX + 'px, ' + randomY + 'px)';
+
+            // Increment move index or reset if it reaches the end
+            moveIndex = (moveIndex + 1) % moves.length;
+
+            // Reset moving flag after the animation
+            setTimeout(function() {
+                moving = false;
+                noButton.style.transition = ''; // Remove transition after animation
+            }, 1000); // Adjusted timeout to match the duration
+        }
+
+        function showEmoji() {
+            var emojiContainer = document.getElementById('emojiContainer');
+            emojiContainer.classList.add('visible');
+        }
+
+        function shrinkButton() {
+            var noButton = document.getElementById('noButton');
+            noButton.classList.add('shrink');
+
+            // Reset button size after a delay
+            setTimeout(function() {
+                noButton.classList.remove('shrink');
+            }, 500); // Adjusted delay to match the transition duration
+        }
+        </script>
+</body>
+</html>
